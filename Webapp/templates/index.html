@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Meal Recommender</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+
+      nav {
+        background-color: #f0f0f0;
+        padding: 10px;
+        margin-bottom: 20px;
+        text-align: center;
+      }
+
+      nav a {
+        margin-right: 15px;
+        text-decoration: none;
+        color: #333;
+        font-weight: bold;
+      }
+
+      nav a:hover {
+        text-decoration: underline;
+      }
+
+      .container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 20px;
+        text-align: center;
+      }
+
+      .grid {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        margin-top: 20px;
+      }
+
+      .grid > div {
+        flex: 1;
+        min-width: 200px;
+        margin: 10px;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+      }
+
+      .selected-meals {
+        margin-top: 20px;
+        text-align: left;
+        border-top: 1px solid #ddd;
+        padding-top: 20px;
+      }
+
+      img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 10px;
+        margin-top: 10px;
+      }
+
+      h1,
+      h2,
+      h3 {
+        margin: 10px 0;
+      }
+
+      ul {
+        list-style: none;
+        padding: 0;
+      }
+
+      ul li {
+        margin-bottom: 5px;
+      }
+
+      /* New style for the category dropdown */
+      #category {
+        padding: 6px 8px;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+        background-color: #fff;
+        font-size: 14px;
+        cursor: pointer;
+        margin-left: 5px; /* optional spacing */
+      }
+
+      /* New style for form buttons & input row */
+      .action-row {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        margin-top: 15px;
+      }
+
+      .action-row form {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .action-row label {
+        font-weight: bold;
+      }
+
+      /* Changed step to 1, min to 1 */
+      .action-row input[type='number'] {
+        width: 60px;
+        padding: 4px;
+        font-size: 14px;
+        text-align: center;
+      }
+
+      .action-row button {
+        padding: 6px 12px;
+        background-color: #007bff;
+        border: none;
+        color: #fff;
+        font-size: 14px;
+        cursor: pointer;
+        border-radius: 4px;
+      }
+
+      .action-row button:hover {
+        background-color: #0056b3;
+      }
+
+      #recommend-button {
+        margin-left: 8px;
+        padding: 6px 12px;
+        background-color: #007bff;
+        border: none;
+        color: #fff;
+        font-size: 14px;
+        cursor: pointer;
+        border-radius: 4px;
+      }
+      #recommend-button:hover {
+        background-color: #0056b3;
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/profile">Profile</a>
+      <a href="/history">History</a>
+      <a href="/rating">Rating</a>
+    </nav>
+
+    <div class="container">
+      <h1>Personalized Meal Recommender</h1>
+      {% if error %}
+      <div style="color: red; margin-bottom: 10px">
+        <strong>{{ error }}</strong>
+      </div>
+      {% endif %}
+      <form action="/recommend" method="post">
+        <label for="category">Select a category:</label>
+        <select name="category" id="category">
+          <option value="Bread"
+            {% if category == "Bread" %} selected {% endif %}>
+            Bread
+          </option>
+          <option value="Breakfast"
+            {% if category == "Breakfast" %} selected {% endif %}>
+            Breakfast
+          </option>
+          <option value="Dairy-Free"
+            {% if category == "Dairy-Free" %} selected {% endif %}>
+            Dairy-Free
+          </option>
+          <option value="Dessert"
+            {% if category == "Dessert" %} selected {% endif %}>
+            Dessert
+          </option>
+          <option value="Dinner"
+            {% if category == "Dinner" %} selected {% endif %}>
+            Dinner
+          </option>
+          <option value="Drink"
+            {% if category == "Drink" %} selected {% endif %}>
+            Drink
+          </option>
+          <option value="Gluten-Sensitive"
+            {% if category == "Gluten-Sensitive" %} selected {% endif %}>
+            Gluten-Sensitive
+          </option>
+          <option value="Low-Fat"
+            {% if category == "Low-Fat" %} selected {% endif %}>
+            Low-Fat
+          </option>
+          <option value="Low-Sodium"
+            {% if category == "Low-Sodium" %} selected {% endif %}>
+            Low-Sodium
+          </option>
+          <option value="Lunch"
+            {% if category == "Lunch" %} selected {% endif %}>
+            Lunch
+          </option>
+          <option value="Salad"
+            {% if category == "Salad" %} selected {% endif %}>
+            Salad
+          </option>
+          <option value="Side-Dish"
+            {% if category == "Side-Dish" %} selected {% endif %}>
+            Side-Dish
+          </option>
+          <option value="Snack"
+            {% if category == "Snack" %} selected {% endif %}>
+            Snack
+          </option>
+          <option value="Soup"
+            {% if category == "Soup" %} selected {% endif %}>
+            Soup
+          </option>
+          <option value="Vegetarian"
+            {% if category == "Vegetarian" %} selected {% endif %}>
+            Vegetarian
+          </option>
+        </select>
+        <button id="recommend-button" type="submit">Get Recommendation</button>
+      </form>
+      
+
+      {% if meal %}
+      <div>
+        <h2>{{ meal.title }}</h2>
+        <img src="{{ meal.image_url }}" alt="{{ meal.title }}" />
+      </div>
+
+      <div class="grid">
+        <div>
+          <h3>Current Daily Intake vs RDI</h3>
+          <ul>
+            {% for nutrient, intake in user_intake.items() %}
+            <li>{{ nutrient }}: {{ intake }} / {{ rdi[nutrient] }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+
+        <div>
+          <h3>Nutritional Info per Serving</h3>
+          {% if meal.serving_size %}
+          <p><strong>Serving Size (g):</strong> {{ meal.serving_size }}</p>
+          {% endif %}
+          <ul>
+            {% for nutrient, value in meal.nutrients.items() %}
+            <li>{{ nutrient }}: {{ value }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+
+      <h3>Nutrient Intake Plot:</h3>
+      <img src="data:image/png;base64,{{ nutrient_plot }}" alt="Nutrient Plot" />
+
+      <!-- Action row for Accept/Reject -->
+      <div class="action-row">
+        <!-- Accept form -->
+        <form action="/accept" method="post">
+          <input type="hidden" name="title" value="{{ meal.title }}" />
+          <label for="servings">How many servings?</label>
+          <!-- Changed step="1" and min="1" -->
+          <input type="number" name="servings" id="servings" step="1" min="1" required />
+          <button type="submit">Accept Meal</button>
+        </form>
+
+        <!-- Reject form -->
+        <form action="/reject" method="post">
+          <input type="hidden" name="title" value="{{ meal.title }}" />
+          <input type="hidden" name="category" value="{{ category }}" />
+          <button type="submit" style="background-color: #dc3545">Reject Meal</button>
+        </form>
+      </div>
+      {% endif %}
+
+      <div class="selected-meals">
+        <h3>Selected Meals:</h3>
+        <ul>
+          {% for meal in chosen_meals %}
+          <li>{{ meal.title }} ({{ meal.servings }}x)</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </body>
+</html>

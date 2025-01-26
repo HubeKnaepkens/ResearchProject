@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>History</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+
+      nav {
+        background-color: #f0f0f0;
+        padding: 10px;
+        margin-bottom: 20px;
+        text-align: center;
+      }
+
+      nav a {
+        margin-right: 15px;
+        text-decoration: none;
+        color: #333;
+        font-weight: bold;
+      }
+
+      nav a:hover {
+        text-decoration: underline;
+      }
+
+      .container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 20px;
+        text-align: center;
+      }
+
+      h1 {
+        margin-bottom: 20px;
+      }
+
+      .timeframe-form {
+        margin-bottom: 20px;
+      }
+
+      .grid {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        margin-top: 20px;
+      }
+
+      .grid > div {
+        flex: 1;
+        min-width: 200px;
+        margin: 10px;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+      }
+
+      img {
+        max-width: 100%;
+        height: auto;
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/profile">Profile</a>
+      <a href="/history">History</a>
+      <a href="/rating">Rating</a>
+    </nav>
+
+    <div class="container">
+      <h1>Meal History</h1>
+
+      <form class="timeframe-form" method="post" action="/history">
+        <label for="timeframe">Select Time Frame:</label>
+        <select id="timeframe" name="timeframe">
+          <option value="1" {% if timeframe == "1" %}selected{% endif %}>1 Month</option>
+          <option value="2" {% if timeframe == "2" %}selected{% endif %}>2 Months</option>
+          <option value="3" {% if timeframe == "3" %}selected{% endif %}>3 Months</option>
+          <option value="4" {% if timeframe == "4" %}selected{% endif %}>4 Months</option>
+          <option value="5" {% if timeframe == "5" %}selected{% endif %}>5 Months</option>
+          <option value="6" {% if timeframe == "6" %}selected{% endif %}>6 Months</option>
+        </select>
+        <button type="submit">Update</button>
+      </form>
+
+      <div class="grid">
+        <div>
+          <h3>Intake vs RDI (Nutrient Values)</h3>
+          <ul>
+            {% for nutrient, value in intake_vs_rdi.items() %}
+            <li>{{ nutrient }}: {{ value['intake'] }} / {{ value['rdi'] }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+
+      <h3>Nutrient Intake Plot:</h3>
+      <img src="data:image/png;base64,{{ nutrient_plot }}" alt="Nutrient Plot" />
+    </div>
+  </body>
+</html>
